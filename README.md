@@ -3,3 +3,4 @@ En este repositorio se subirán las modificaciones del proyecto de "Programació
 Integrantes: Carlos De La O
 Samanta Toruño
 Keysha Morales
+Rayner Rodriguez
