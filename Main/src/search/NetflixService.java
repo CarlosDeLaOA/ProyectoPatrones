@@ -1,31 +1,31 @@
 package search;
-import java.util.Collection;
-import java.util.Vector;
+
+import java.util.ArrayList;
+
+
 public class NetflixService implements StreamingService{
     @Override
-    public void configurar(Collection<String> configParams) {
+    public void configurar(ArrayList<String> configParams) {
         System.out.println("Configurando servicio de Netflix...");
     }
 
     @Override
-    public Collection<SearchResult> consultar(String query, Vector<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
         System.out.println("Consultando resultados de Netflix:");
         for (String param : configParams) {
             System.out.println("- " + param);
         }
 
-        return new Vector<SearchResult>();
+        return new ArrayList<SearchResult>();
     }
 
     @Override
-    public Collection<SearchResult> buscar(String query, Vector<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
         System.out.println("Buscando '" + query + "' en Netflix con los siguientes parámetros de configuración:");
         for (String param : configParams) {
             System.out.println("- " + param);
         }
 
-        return new Vector<SearchResult>();
+        return new ArrayList<SearchResult>();
     }
 }
-
-
