@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+//Hola
 
 /**
  * Clase principal que permite al usuario interactuar con el sistema de autenticación.

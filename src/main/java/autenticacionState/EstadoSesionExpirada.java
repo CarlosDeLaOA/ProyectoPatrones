@@ -2,6 +2,10 @@ package autenticacionState;
 
 public class EstadoSesionExpirada implements EstadoAutenticacion{
 
+
+    /**
+     * Metodo para iniciar sesion
+     */
     @Override
     public void iniciarSesion() {
         System.out.println("Porfavor, vuelva a iniciar sesión");
@@ -9,6 +13,9 @@ public class EstadoSesionExpirada implements EstadoAutenticacion{
 
     }
 
+    /**
+     * Metodo para acceder al servicio
+     */
     @Override
     public void accederServicio() {
         System.out.println("Sesion expirada");
@@ -16,12 +23,19 @@ public class EstadoSesionExpirada implements EstadoAutenticacion{
 
     }
 
+    /**
+     * Metodo para cerrar Sesion
+     */
     @Override
     public void cerrarSesion() {
         System.out.println("Sesion cerrada");
         ContextoAutenticacion.getInstance().setEstadoAutenticacion(new EstadoNoAutenticado());
 
     }
+
+    /**
+     * Metodo para mostrar estado
+     */
 
     @Override
     public void mostrarEstado() {
