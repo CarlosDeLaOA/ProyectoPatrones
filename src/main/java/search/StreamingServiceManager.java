@@ -1,6 +1,7 @@
 package search;
 import java.util.ArrayList;
 import java.util.Collection;
+//Ray
 
 public class StreamingServiceManager {
     private static StreamingServiceManager instance;
