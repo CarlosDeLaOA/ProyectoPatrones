@@ -3,8 +3,16 @@ package autenticacionState;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Clase que representa el estado de no autenticación. el usuario no tiene acceso a los servicios del sistema
+ */
 public class EstadoNoAutenticado implements EstadoAutenticacion {
 
+    /**
+     * Solicita al usuario su correo y contraseña para intentar iniciar sesión.
+     * Si las credenciales son correctas, genera un token de autenticación, muestra un mensaje de éxito y cambia el estado a EstadoAutenticado.
+     * Si las credenciales no coinciden, muestra un mensaje de error.
+     */
     @Override
     public void iniciarSesion() {
         ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
@@ -27,16 +35,26 @@ public class EstadoNoAutenticado implements EstadoAutenticacion {
         }
     }
 
+    /**
+     * Intenta acceder a los servicios, pero el acceso es denegado
+     * debido a que el usuario no está autenticado. Muestra un mensaje indicando que el acceso es denegado.
+     */
     @Override
     public void accederServicio() {
         System.out.println("Acceso denegado. Usuario no autenticado.");
     }
 
+    /**
+     * Intenta cerrar la sesión
+     */
     @Override
     public void cerrarSesion() {
         System.out.println("Ya estás sin sesión.");
     }
 
+    /**
+     * Muestra el estado actual del usuario como no autenticado.
+     */
     @Override
     public void mostrarEstado() {
         System.out.println("Estado: No Autenticado");

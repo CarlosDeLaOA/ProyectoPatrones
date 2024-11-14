@@ -8,8 +8,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+/**
+ * Clase principal que permite al usuario interactuar con el sistema de autenticación.
+ * Proporciona un menú para registrar usuario, iniciar sesión, acceder a servicios, cerrar sesión y ver el estado.
+ * Incluye la funcionalidad para buscar una película utilizando la API de The Movie Database (TMDb).
+ */
 public class Main {
 
+    /**
+     * Método principal que ejecuta el menú interactivo del sistema de autenticación.
+     * Los usuarios pueden elegir entre registrar un usuario, iniciar sesión, acceder a un servicio,
+     * cerrar sesión, mostrar el estado actual de autenticación o salir del programa.
+     *
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
@@ -32,7 +44,12 @@ public class Main {
         } while (option != 0);
     }
 
-
+    /**
+     * Permite al usuario buscar una película en la API de The Movie Database (TMDb).
+     * Solicita al usuario el nombre de la película
+     *
+     * @throws IOException Si ocurre un error de entrada/salida al leer datos o realizar la solicitud HTTP.
+     */
     public static void buscarPelicula() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Ingrese el nombre de la película:");
