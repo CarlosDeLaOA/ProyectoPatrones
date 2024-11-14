@@ -1,18 +1,22 @@
 package autenticacionState;
 
-public class ContextoAutenticacion implements EstadoAutenticacion{
-    @Override
-    public void iniciarSesion() {
+public class ContextoAutenticacion{
+   private EstadoAutenticacion estadoAutenticacion;
 
+   public ContextoAutenticacion(){
+       this.estadoAutenticacion = new EstadoNoAutenticado();
+   }
+
+    public void setEstadoAutenticacion(EstadoAutenticacion estadoAutenticacion) {
+        this.estadoAutenticacion = estadoAutenticacion;
     }
-
-    @Override
-    public void accederServicio() {
-
-    }
-
-    @Override
-    public void cerrarSesion() {
-
-    }
+    public void iniciarSesion(){
+       estadoAutenticacion.iniciarSesion();
+    };
+    public void accederServicio(){
+        estadoAutenticacion.accederServicio();
+    };
+    public void cerrarSesion(){
+        estadoAutenticacion.cerrarSesion();
+    };
 }

@@ -16,4 +16,9 @@ public class EstadoSesionExpirada implements EstadoAutenticacion{
     public void cerrarSesion() {
 
     }
+
+    @Override
+    public void mostrarEstado() {
+
+    }
 }
