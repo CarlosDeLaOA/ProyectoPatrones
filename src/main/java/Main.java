@@ -12,22 +12,26 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        ContextoAutenticacion contexto = new ContextoAutenticacion();
+        ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
         int option;
 
         do {
-            System.out.println("\n1. Iniciar Sesión\n2. Acceder a Servicio\n3. Cerrar Sesión\n0. Salir");
+            System.out.println("\n1. Registrar Usuario\n2. Iniciar Sesión\n3. Acceder a Servicio\n4. Cerrar Sesión\n5. Mostrar Estado\n0. Salir");
             option = scanner.nextInt();
+            scanner.nextLine(); // Consume el salto de línea
 
-            switch ( option) {
-                case 1 -> contexto.iniciarSesion();
-                case 2 -> contexto.accederServicio();
-                case 3 -> contexto.cerrarSesion();
+            switch (option) {
+                case 1 -> contexto.registrarUsuario();
+                case 2 -> contexto.iniciarSesion();
+                case 3 -> contexto.accederServicio();
+                case 4 -> contexto.cerrarSesion();
+                case 5 -> contexto.mostrarEstado();
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción no válida.");
             }
-        } while ( option != 0);
+        } while (option != 0);
     }
+
 
     public static void buscarPelicula() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
