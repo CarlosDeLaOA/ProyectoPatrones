@@ -1,3 +1,4 @@
+import autenticacionState.ContextoAutenticacion;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -8,8 +9,10 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
+        ContextoAutenticacion contexto = new ContextoAutenticacion();
         int option;
 
         do {

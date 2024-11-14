@@ -19,6 +19,7 @@ public class EstadoSesionExpirada implements EstadoAutenticacion{
 
     @Override
     public void mostrarEstado() {
+        System.out.println("Estado Sesion Expirada");
 
     }
 }
