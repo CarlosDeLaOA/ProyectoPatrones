@@ -2,12 +2,19 @@ import autenticacionState.ContextoAutenticacion;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import Proxy.StreamingServiceProxy;
+import Models.Usuario;
+import Models.Subscripcion;
+import search.NetflixService;
+import search.SearchResult;
+import search.StreamingService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
-//Hola
 
 /**
  * Clase principal que permite al usuario interactuar con el sistema de autenticación.
@@ -28,6 +35,24 @@ public class Main {
         ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
         int option;
 
+        // Crear un ejemplo de usuario y subscripción
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan Pérez");
+        usuario.setCorreoElectronico("juan@example.com");
+        Subscripcion subscripcion = new Subscripcion(
+                "Netflix",
+                "Premium",
+                LocalDate.now().minusMonths(1), // Activada hace un mes
+                LocalDate.now().plusMonths(1), // Expira en un mes
+                12.99,
+                "Acceso total"
+        );
+        usuario.setSubscripcion(subscripcion);
+
+        // Configurar servicio de streaming real y proxy
+        StreamingService netflixService = new NetflixService();
+        StreamingService proxyService = new StreamingServiceProxy(netflixService, usuario);
+
         do {
             System.out.println("\n1. Registrar Usuario\n2. Iniciar Sesión\n3. Acceder a Servicio\n4. Cerrar Sesión\n5. Mostrar Estado\n0. Salir");
             option = scanner.nextInt();
@@ -36,7 +61,11 @@ public class Main {
             switch (option) {
                 case 1 -> contexto.registrarUsuario();
                 case 2 -> contexto.iniciarSesion();
-                case 3 -> contexto.accederServicio();
+                case 3 -> {
+                    System.out.println("Intentando acceder al servicio de streaming...");
+                    ArrayList<SearchResult> resultados = proxyService.consultar("Películas populares", new ArrayList<>());
+                    System.out.println("Resultados obtenidos: " + resultados.size());
+                }
                 case 4 -> contexto.cerrarSesion();
                 case 5 -> contexto.mostrarEstado();
                 case 0 -> System.out.println("Saliendo...");

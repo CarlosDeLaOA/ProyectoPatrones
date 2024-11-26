@@ -141,4 +141,10 @@ public class Usuario {
         this.servicioStreaming = servicioStreaming;
     }
 
+    public Subscripcion getSubscripcion() {
+        return null;
+    }
+
+    public void setSubscripcion(Subscripcion subscripcion) {
+    }
 }
