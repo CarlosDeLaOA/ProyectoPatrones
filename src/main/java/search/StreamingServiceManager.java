@@ -1,6 +1,5 @@
 package search;
 import java.util.ArrayList;
-import java.util.Collection;
 //Ray
 
 public class StreamingServiceManager {
@@ -27,19 +26,21 @@ public class StreamingServiceManager {
         }
     }
 
-    public void consultarServicio(String query, ArrayList<String> configParams){
+    public ArrayList<SearchResult> consultarServicio(String query, ArrayList<String> configParams){
         if(servicioActual != null) {
-            servicioActual.buscar(query, configParams);
+            return servicioActual.consultar(query, configParams);
         }else {
             System.out.println("No se ha seleccionado ningun servicio");
+            return null;
         }
     }
 
-    public void buscarEnServicio(String query, ArrayList<String> configParams){
+    public ArrayList<SearchResult> buscarEnServicio(String query, ArrayList<String> configParams){
         if(servicioActual != null) {
-            servicioActual.buscar(query, configParams);
+            return servicioActual.buscar(query.replace(" ","+"), configParams);
         }else {
             System.out.println("No se ha seleccionado ningun servicio");
+            return null;
         }
     }
 }

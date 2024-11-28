@@ -3,9 +3,8 @@ import autenticacionState.ContextoAutenticacion;
 import Proxy.StreamingServiceProxy;
 import Models.Usuario;
 import Models.Subscripcion;
-import search.NetflixService;
-import search.SearchResult;
-import search.StreamingService;
+import org.json.simple.parser.ParseException;
+import search.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +27,12 @@ public class Main {
      *
      * @throws IOException Si ocurre un error de entrada/salida.
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParseException {
+
+            buscarPelicula();
+
+
+
         Scanner scanner = new Scanner(System.in);
         ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
         int option;
@@ -78,12 +82,28 @@ public class Main {
      *
      * @throws IOException Si ocurre un error de entrada/salida al leer datos o realizar la solicitud HTTP.
      */
-    public static void buscarPelicula() throws IOException {
+    public static void buscarPelicula() throws IOException, ParseException {
+
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Ingrese el nombre de la película:");
         String movie = in.readLine();
 
-        System.out.println(ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso("search/movie?query=" + movie));
+        StreamingServiceManager.getInstance().setServicio(new CrunchyRollService());
+        ArrayList<SearchResult> results = StreamingServiceManager.getInstance().buscarEnServicio(movie, null);
+//        ArrayList<SearchResult> results = StreamingServiceManager.getInstance().consultarServicio(movie, null);
+
+        ArrayList<ContenidoResult> contenidos = results.get(0).getContenidos();
+
+//        System.out.println(contenidos.get(0).getTitulo());
+
+        for (ContenidoResult content : contenidos){
+            System.out.println(content.getId());
+            System.out.println(content.getTitulo());
+            System.out.println(content.getDescripcion());
+            System.out.println(content.getPopularidad());
+            System.out.println(content.getIdioma());
+            System.out.println("-----------------------");
+        }
 
     }
 }

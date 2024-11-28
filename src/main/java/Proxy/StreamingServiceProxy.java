@@ -12,8 +12,8 @@ import java.util.ArrayList;
  * Este patrón Proxy permite verificar la validez de la suscripción antes
  * de delegar las llamadas al servicio real.
  */
-public class StreamingServiceProxy implements StreamingService {
-    
+public class StreamingServiceProxy extends StreamingService {
+
     /**
      * Instancia del servicio real de streaming que será delegado.
      */
@@ -26,7 +26,7 @@ public class StreamingServiceProxy implements StreamingService {
 
     /**
      * Constructor de la clase proxy.
-     * 
+     *
      * @param realService El servicio real de streaming que se va a delegar.
      * @param usuario El usuario cuya suscripción se va a verificar.
      */
@@ -37,13 +37,13 @@ public class StreamingServiceProxy implements StreamingService {
 
     /**
      * Verifica si el usuario tiene acceso al servicio basándose en su suscripción.
-     * 
+     *
      * @return true si el usuario tiene acceso, false si no tiene una suscripción activa
      *         o si esta ha expirado.
      */
     private boolean tieneAcceso() {
         Subscripcion subscripcion = usuario.getSubscripcion();
-        
+
         if (subscripcion == null) {
             System.out.println("Acceso denegado: No hay suscripción activa.");
             return false;
@@ -61,7 +61,7 @@ public class StreamingServiceProxy implements StreamingService {
     /**
      * Configura el servicio de streaming con los parámetros proporcionados si el
      * usuario tiene acceso.
-     * 
+     *
      * @param configParams Lista de parámetros de configuración que serán aplicados
      *                     al servicio de streaming.
      */
@@ -75,7 +75,7 @@ public class StreamingServiceProxy implements StreamingService {
     /**
      * Realiza una consulta de búsqueda en el servicio de streaming, si el usuario
      * tiene acceso.
-     * 
+     *
      * @param query Consulta a realizar en el servicio de streaming.
      * @param configParams Lista de parámetros de configuración a usar durante
      *                     la consulta.
@@ -93,7 +93,7 @@ public class StreamingServiceProxy implements StreamingService {
 
     /**
      * Realiza una búsqueda en el servicio de streaming, si el usuario tiene acceso.
-     * 
+     *
      * @param query Consulta a realizar en el servicio de streaming.
      * @param configParams Lista de parámetros de configuración a usar durante
      *                     la búsqueda.

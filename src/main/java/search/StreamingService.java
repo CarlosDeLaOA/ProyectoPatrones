@@ -2,11 +2,31 @@ package search;
 
 import java.util.ArrayList;
 
-public interface StreamingService {
-    void configurar(ArrayList<String> configParams);
+public abstract class StreamingService {
+    private String baseUrl;
+    private String token;
 
-    ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams);
+    abstract public void configurar(ArrayList<String> configParams);
 
-    ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams);
+    abstract public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams);
 
+    abstract public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams);
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
+
+
