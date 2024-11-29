@@ -1,4 +1,5 @@
 import ApiFachada.ClienteApiRest;
+import FactoryMethod.StreamingServiceFactory;
 import autenticacionState.ContextoAutenticacion;
 import Proxy.StreamingServiceProxy;
 import Models.Usuario;
@@ -13,50 +14,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Clase principal que permite al usuario interactuar con el sistema de autenticación.
- * Proporciona un menú para registrar usuario, iniciar sesión, acceder a servicios, cerrar sesión y ver el estado.
- * Incluye la funcionalidad para buscar una película utilizando la API de The Movie Database (TMDb).
- */
 public class Main {
 
-    /**
-     * Método principal que ejecuta el menú interactivo del sistema de autenticación.
-     * Los usuarios pueden elegir entre registrar un usuario, iniciar sesión, acceder a un servicio,
-     * cerrar sesión, mostrar el estado actual de autenticación o salir del programa.
-     *
-     * @throws IOException Si ocurre un error de entrada/salida.
-     */
     public static void main(String[] args) throws IOException, ParseException {
-
-            buscarPelicula();
-
-
-
         Scanner scanner = new Scanner(System.in);
         ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
+        StreamingServiceFactory factory = new StreamingServiceFactory();
+
+        Usuario usuario = crearUsuarioEjemplo();
+        StreamingServiceProxy proxyService = null;
+
         int option;
-
-        // Crear un ejemplo de usuario y subscripción
-        Usuario usuario = new Usuario();
-        usuario.setNombre("Juan Pérez");
-        usuario.setCorreoElectronico("juan@example.com");
-        Subscripcion subscripcion = new Subscripcion(
-                "Netflix",
-                "Premium",
-                LocalDate.now().minusMonths(1), // Activada hace un mes
-                LocalDate.now().plusMonths(1), // Expira en un mes
-                12.99,
-                "Acceso total"
-        );
-        usuario.setSubscripcion(subscripcion);
-
-        // Configurar servicio de streaming real y proxy
-        StreamingService netflixService = new NetflixService();
-        StreamingService proxyService = new StreamingServiceProxy(netflixService, usuario);
-
         do {
-            System.out.println("\n1. Registrar Usuario\n2. Iniciar Sesión\n3. Acceder a Servicio\n4. Cerrar Sesión\n5. Mostrar Estado\n0. Salir");
+            System.out.println("\n1. Registrar Usuario");
+            System.out.println("2. Iniciar Sesión");
+            System.out.println("3. Seleccionar Servicio de Streaming");
+            System.out.println("4. Acceder a Servicio");
+            System.out.println("5. Buscar Película");
+            System.out.println("6. Cerrar Sesión");
+            System.out.println("7. Mostrar Estado");
+            System.out.println("0. Salir");
             option = scanner.nextInt();
             scanner.nextLine(); // Consume el salto de línea
 
@@ -64,24 +41,63 @@ public class Main {
                 case 1 -> contexto.registrarUsuario();
                 case 2 -> contexto.iniciarSesion();
                 case 3 -> {
-                    System.out.println("Intentando acceder al servicio de streaming...");
-                    ArrayList<SearchResult> resultados = proxyService.consultar("Películas populares", new ArrayList<>());
-                    System.out.println("Resultados obtenidos: " + resultados.size());
+                    System.out.println("Seleccione el servicio de streaming:");
+                    System.out.println("1. Netflix");
+                    System.out.println("2. CrunchyRoll");
+                    System.out.println("3. DisneyPlus");
+                    int serviceOption = scanner.nextInt();
+                    scanner.nextLine();
+
+                    String serviceName = switch (serviceOption) {
+                        case 1 -> "netflix";
+                        case 2 -> "crunchyroll";
+                        case 3 -> "disneyplus";
+                        default -> {
+                            System.out.println("Opción no válida. Seleccionando Netflix por defecto.");
+                            yield "netflix";
+                        }
+                    };
+
+                    StreamingService selectedService = factory.getService(serviceName);
+                    proxyService = new StreamingServiceProxy(selectedService, usuario);
+                    System.out.println("Servicio de " + serviceName + " seleccionado y configurado.");
                 }
-                case 4 -> contexto.cerrarSesion();
-                case 5 -> contexto.mostrarEstado();
+                case 4 -> {
+                    if (proxyService != null) {
+                        System.out.println("Intentando acceder al servicio de streaming...");
+                        ArrayList<SearchResult> resultados = proxyService.consultar("Películas populares", new ArrayList<>());
+                        System.out.println("Resultados obtenidos: " + resultados.size());
+                    } else {
+                        System.out.println("Por favor, seleccione un servicio primero (opción 3).");
+                    }
+                }
+                case 5 -> {
+                    buscarPelicula();
+                }
+                case 6 -> contexto.cerrarSesion();
+                case 7 -> contexto.mostrarEstado();
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción no válida.");
             }
         } while (option != 0);
     }
 
-    /**
-     * Permite al usuario buscar una película en la API de The Movie Database (TMDb).
-     * Solicita al usuario el nombre de la película
-     *
-     * @throws IOException Si ocurre un error de entrada/salida al leer datos o realizar la solicitud HTTP.
-     */
+    private static Usuario crearUsuarioEjemplo() {
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Juan Pérez");
+        usuario.setCorreoElectronico("juan@example.com");
+        Subscripcion subscripcion = new Subscripcion(
+                "Netflix",
+                "Premium",
+                LocalDate.now().minusMonths(1),
+                LocalDate.now().plusMonths(1),
+                12.99,
+                "Acceso total"
+        );
+        usuario.setSubscripcion(subscripcion);
+        return usuario;
+    }
+
     public static void buscarPelicula() throws IOException, ParseException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
