@@ -4,7 +4,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-public class ContenidoResult {
+/**
+ * Clase que representa un contenido obtenido desde la API.
+ * Implementa la interfaz Contenido para poder ser gestionado por el patrón Composite.
+ */
+public class ContenidoResult implements Contenido {
+
     private long id;
     private String titulo;
     private String descripcion;
@@ -20,6 +25,7 @@ public class ContenidoResult {
         setIdioma(jsonObject.get("original_language").toString());
     }
 
+    // Getters y setters
     public long getId() {
         return id;
     }
@@ -58,5 +64,17 @@ public class ContenidoResult {
 
     public void setIdioma(String idioma) {
         this.idioma = idioma;
+    }
+
+    /**
+     * Implementación del método de la interfaz Contenido para mostrar detalles del contenido.
+     */
+    @Override
+    public void mostrarDetalles() {
+        System.out.println("Título: " + titulo);
+        System.out.println("Descripción: " + descripcion);
+        System.out.println("Idioma: " + idioma);
+        System.out.println("Popularidad: " + popularidad);
+        System.out.println("-----------------------");
     }
 }

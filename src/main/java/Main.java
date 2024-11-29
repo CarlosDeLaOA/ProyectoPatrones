@@ -104,22 +104,24 @@ public class Main {
         System.out.println("Ingrese el nombre de la película:");
         String movie = in.readLine();
 
+        // Realizar la búsqueda en el servicio de streaming
         StreamingServiceManager.getInstance().setServicio(new CrunchyRollService());
         ArrayList<SearchResult> results = StreamingServiceManager.getInstance().buscarEnServicio(movie, null);
-//        ArrayList<SearchResult> results = StreamingServiceManager.getInstance().consultarServicio(movie, null);
 
+        // Obtener los contenidos del primer resultado (asumiendo que hay más resultados)
         ArrayList<ContenidoResult> contenidos = results.get(0).getContenidos();
 
-//        System.out.println(contenidos.get(0).getTitulo());
+        // Crear una colección de contenido
+        ColeccionContenido coleccion = new ColeccionContenido();
 
-        for (ContenidoResult content : contenidos){
-            System.out.println(content.getId());
-            System.out.println(content.getTitulo());
-            System.out.println(content.getDescripcion());
-            System.out.println(content.getPopularidad());
-            System.out.println(content.getIdioma());
-            System.out.println("-----------------------");
+        // Convertir los resultados en objetos Contenido y agregarlos a la colección
+        for (ContenidoResult content : contenidos) {
+            coleccion.agregarContenido(content);
         }
 
+        // Mostrar los detalles de todos los contenidos
+        coleccion.mostrarDetalles();
     }
-}
+
+    }
+
