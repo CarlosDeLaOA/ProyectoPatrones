@@ -46,7 +46,7 @@ public class CrunchyRollService extends StreamingService {
     public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
         System.out.println("Buscando '" + query + "' en CrunchyRoll:");
 
-        String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=anime" + query, getToken());
+        String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=" + query, getToken());
         SearchResult searchResult = null;
 
         try {
