@@ -17,52 +17,51 @@ registrarse con correo y contrasena.
 
 ### Singleton
 
-```http
+```
   src/fachada/ClienteApiRest
 ```
 
 ### Factory Method
 
-```http
+```
   src/FactoryMethod/StreamingServiceFactory
 ```
 
 ### Proxy
 
-```http
+```
   src/Proxy/StreamingServiceProxy
 ```
 
 ### Prototype
 
-```http
+```
   src/search/Prototype
   src/search/StreamingService
 ```
 
 ### State
 
-```http
+```
   src/AutenticacionState/*
 ```
 
 ### Observer
 
-```http
+```
   src/observer/*
   src/Models/Usuario
 ```
 
 ### Facade
 
-```http
+```
   src/ApiFachada/*
 ```
 
 ### Composite
 
-```http
+```
   src/search/Contenido
   src/search/ContenidoResult
-  
 ```
