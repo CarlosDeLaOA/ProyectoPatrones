@@ -65,3 +65,8 @@ registrarse con correo y contrasena.
   src/search/Contenido
   src/search/ContenidoResult
 ```
+### Adapter
+
+```
+  src/adapter/*
+```
