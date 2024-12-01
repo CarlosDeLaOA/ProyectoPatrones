@@ -7,6 +7,15 @@ import java.util.ArrayList;
 
 
 public class DisneyPlusService extends StreamingService {
+    public  DisneyPlusService(){
+
+    }
+    public DisneyPlusService(DisneyPlusService pDisneyPlusService){
+        super(pDisneyPlusService);
+    }
+    public Prototype clone(){
+        return new DisneyPlusService();
+    }
     @Override
     public void configurar(ArrayList<String> configParams) {
         System.out.println("Configurando servicio de DisneyPlus...");

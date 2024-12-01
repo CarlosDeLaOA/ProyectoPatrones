@@ -6,6 +6,15 @@ import java.util.ArrayList;
 
 
 public class NetflixService extends StreamingService{
+    public NetflixService(){
+
+    }
+    public NetflixService(NetflixService pNetflixService){
+        super(pNetflixService);
+    }
+    public Prototype clone(){
+        return new DisneyPlusService();
+    }
     @Override
     public void configurar(ArrayList<String> configParams) {
         System.out.println("Configurando servicio de Netflix...");

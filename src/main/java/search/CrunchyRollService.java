@@ -7,7 +7,15 @@ import java.util.ArrayList;
 
 
 public class CrunchyRollService extends StreamingService {
+    public CrunchyRollService(){
 
+    }
+    public CrunchyRollService(CrunchyRollService pCrunchyRollService){
+        super(pCrunchyRollService);
+    }
+    public Prototype clone(){
+        return new DisneyPlusService();
+    }
     @Override
     public void configurar(ArrayList<String> configParams) {
         setBaseUrl(configParams.get(0));

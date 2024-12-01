@@ -1,6 +1,8 @@
 package Models;
 
-public class Usuario {
+import observer.ISubscriptor;
+
+public class Usuario implements ISubscriptor {
 
     // Atributos privados de la clase Usuario
     private int idUsuario;
@@ -146,5 +148,11 @@ public class Usuario {
     }
 
     public void setSubscripcion(Subscripcion subscripcion) {
+    }
+
+    @Override
+    public void actualizar(String mensaje) {
+        System.out.println("Hola!!" + getNombre());
+        System.out.println(mensaje);
     }
 }
