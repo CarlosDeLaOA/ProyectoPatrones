@@ -14,6 +14,16 @@ public interface ApiRestFachada {
      */
     String obtenerRecurso(String url);
 
+    /**
+     * Representa una
+     * solicitud GET para obtener datos de un recurso en una URL
+     * específica.
+     * @param url
+     * @param token
+     * @return resultado
+     */
+    String obtenerRecurso(String url, String token);
+
     //Representa una solicitud POST para crear un nuevo recurso
     //usando un JSON en el cuerpo de la solicitud.
 

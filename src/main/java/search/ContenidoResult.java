@@ -71,6 +71,7 @@ public class ContenidoResult implements Contenido {
      */
     @Override
     public void mostrarDetalles() {
+        System.out.println("\n-----------------------");
         System.out.println("Título: " + titulo);
         System.out.println("Descripción: " + descripcion);
         System.out.println("Idioma: " + idioma);

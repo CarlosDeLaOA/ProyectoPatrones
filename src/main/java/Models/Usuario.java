@@ -13,6 +13,7 @@ public class Usuario implements ISubscriptor {
     private String contrasenia;
     private String preferencias;
     private String servicioStreaming;
+    private Subscripcion subscripcion;
 
     /**
      * Obtiene el ID del usuario.
@@ -144,15 +145,22 @@ public class Usuario implements ISubscriptor {
     }
 
     public Subscripcion getSubscripcion() {
-        return null;
+        return subscripcion;
     }
 
     public void setSubscripcion(Subscripcion subscripcion) {
+        this.subscripcion = subscripcion;
     }
 
     @Override
     public void actualizar(String mensaje) {
-        System.out.println("Hola!!" + getNombre());
-        System.out.println(mensaje);
+        String ANSI_PURPLE = "\u001B[35m";
+        String ANSI_GREEN = "\u001B[32m";
+        String ANSI_RESET = "\u001B[0m";
+
+
+        System.out.println(ANSI_PURPLE + "Hola " + getNombre()+ "!!! \uD83D\uDC4B");
+        System.out.println("Tienes una nueva notificacion:");
+        System.out.println(ANSI_GREEN + mensaje + ANSI_RESET + "\n");
     }
 }

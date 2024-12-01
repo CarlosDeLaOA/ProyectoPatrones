@@ -2,6 +2,7 @@ package Proxy;
 
 import Models.Usuario;
 import Models.Subscripcion;
+import search.Prototype;
 import search.StreamingService;
 import search.SearchResult;
 import java.util.ArrayList;
@@ -107,5 +108,10 @@ public class StreamingServiceProxy extends StreamingService {
         }
         System.out.println("Acceso denegado a la búsqueda.");
         return new ArrayList<>();
+    }
+
+    @Override
+    public Prototype clone() {
+        return null;
     }
 }

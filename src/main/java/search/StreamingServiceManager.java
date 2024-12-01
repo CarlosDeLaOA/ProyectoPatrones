@@ -1,12 +1,27 @@
 package search;
+import FactoryMethod.StreamingServiceFactory;
+import Models.Usuario;
+import Proxy.StreamingServiceProxy;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 //Ray
 
 public class StreamingServiceManager {
     private static StreamingServiceManager instance;
-    private StreamingService servicioActual;
 
-    private StreamingServiceManager() {}
+    private StreamingService servicioActual;
+    private HashMap<String, StreamingService> serviciosDisponibles = new HashMap<>();
+
+
+    private StreamingServiceManager() {
+        StreamingService crunchyRoll = StreamingServiceFactory.getService("crunchyroll");
+        StreamingService disneyPlus = StreamingServiceFactory.getService("disneyplus");
+        StreamingService netflix = StreamingServiceFactory.getService("netflix");
+        serviciosDisponibles.put("crunchyroll", crunchyRoll);
+        serviciosDisponibles.put("disneyplus", disneyPlus);
+        serviciosDisponibles.put("netflix", netflix);
+    }
 
     public static StreamingServiceManager getInstance() {
         if(instance == null) {
@@ -17,6 +32,18 @@ public class StreamingServiceManager {
 
     public void setServicio(StreamingService servicio) {
         this.servicioActual = servicio;
+    }
+    public void setServicio(String servicio, Usuario usuario){
+        switch (servicio){
+            case "crunchyroll":
+            case "disneyplus":
+            case "netflix":
+                servicioActual = new StreamingServiceProxy((StreamingService) serviciosDisponibles.get(servicio).clone(), usuario);
+                break;
+            default:
+                System.out.println("Servicio no disponible");
+
+        }
     }
     public void configurarServicio(ArrayList<String> configuracionServicio) {
         if(servicioActual != null) {

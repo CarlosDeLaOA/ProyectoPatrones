@@ -14,7 +14,7 @@ public class CrunchyRollService extends StreamingService {
         super(pCrunchyRollService);
     }
     public Prototype clone(){
-        return new DisneyPlusService();
+        return new CrunchyRollService(this);
     }
     @Override
     public void configurar(ArrayList<String> configParams) {
@@ -25,20 +25,19 @@ public class CrunchyRollService extends StreamingService {
 
     @Override
     public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
-        System.out.println("Consultando resultados de CrunchyRoll:");
+        System.out.println("Consultando resultados de CrunchyRoll: ");
 
-        String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso("movie/" + query);
-        ContenidoResult content = null;
+        String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=anime", getToken());
+        SearchResult searchResult = null;
 
         try {
-            content = new ContenidoResult(result);
+            searchResult = new SearchResult(result);
         }catch (Exception e){
             System.out.println("Error de conversion");
         }
 
         ArrayList<SearchResult> lista = new ArrayList<>();
-        lista.add(new SearchResult());
-        lista.getFirst().getContenidos().add(content);
+        lista.add(searchResult);
 
         return lista;
     }
@@ -47,7 +46,7 @@ public class CrunchyRollService extends StreamingService {
     public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
         System.out.println("Buscando '" + query + "' en CrunchyRoll:");
 
-        String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso("search/movie?query=" + query);
+        String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=anime" + query, getToken());
         SearchResult searchResult = null;
 
         try {

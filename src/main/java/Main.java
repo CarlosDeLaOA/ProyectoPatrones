@@ -1,9 +1,7 @@
-import ApiFachada.ClienteApiRest;
-import FactoryMethod.StreamingServiceFactory;
 import autenticacionState.ContextoAutenticacion;
-import Proxy.StreamingServiceProxy;
 import Models.Usuario;
 import Models.Subscripcion;
+import observer.NotificationManager;
 import org.json.simple.parser.ParseException;
 import search.*;
 
@@ -16,13 +14,10 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         ContextoAutenticacion contexto = ContextoAutenticacion.getInstance();
-        StreamingServiceFactory factory = new StreamingServiceFactory();
-
         Usuario usuario = crearUsuarioEjemplo();
-        StreamingServiceProxy proxyService = null;
 
         int option;
         do {
@@ -33,6 +28,7 @@ public class Main {
             System.out.println("5. Buscar Película");
             System.out.println("6. Cerrar Sesión");
             System.out.println("7. Mostrar Estado");
+            System.out.println("8. Enviar notificacion a usuarios subscritos");
             System.out.println("0. Salir");
             option = scanner.nextInt();
             scanner.nextLine(); // Consume el salto de línea
@@ -58,24 +54,43 @@ public class Main {
                         }
                     };
 
-                    StreamingService selectedService = factory.getService(serviceName);
-                    proxyService = new StreamingServiceProxy(selectedService, usuario);
+                    StreamingServiceManager.getInstance().setServicio(serviceName, usuario);
                     System.out.println("Servicio de " + serviceName + " seleccionado y configurado.");
                 }
                 case 4 -> {
-                    if (proxyService != null) {
                         System.out.println("Intentando acceder al servicio de streaming...");
-                        ArrayList<SearchResult> resultados = proxyService.consultar("Películas populares", new ArrayList<>());
-                        System.out.println("Resultados obtenidos: " + resultados.size());
-                    } else {
-                        System.out.println("Por favor, seleccione un servicio primero (opción 3).");
-                    }
+                        ArrayList<SearchResult> resultados = StreamingServiceManager.getInstance().consultarServicio("Consultar",null);
+                        imprimirResultados(resultados);
                 }
-                case 5 -> {
-                    buscarPelicula();
-                }
+                case 5 -> buscarPelicula();
+
                 case 6 -> contexto.cerrarSesion();
                 case 7 -> contexto.mostrarEstado();
+                case 8 -> {
+                    Usuario usuario1 = new Usuario();
+                    usuario1.setNombre("Key");
+
+                    Usuario usuario2 = new Usuario();
+                    usuario2.setNombre("Carlos");
+
+                    Usuario usuario3 = new Usuario();
+                    usuario3.setNombre("Samanta");
+
+                    Usuario usuario4 = new Usuario();
+                    usuario4.setNombre("Rayner");
+
+                    NotificationManager notificationManager = new NotificationManager();
+                    notificationManager.subscribirse(usuario1);
+                    notificationManager.subscribirse(usuario2);
+                    notificationManager.subscribirse(usuario3);
+                    notificationManager.subscribirse(usuario4);
+
+                    System.out.println("Ingrese el texto de la notificacion");
+                    String texto = scanner.nextLine();
+                    System.out.println("Enviando notificacion\n");
+                    notificationManager.notifySubcribers(texto);
+
+                }
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción no válida.");
             }
@@ -98,30 +113,37 @@ public class Main {
         return usuario;
     }
 
-    public static void buscarPelicula() throws IOException, ParseException {
+    public static void buscarPelicula() throws IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Ingrese el nombre de la película:");
         String movie = in.readLine();
 
         // Realizar la búsqueda en el servicio de streaming
-        StreamingServiceManager.getInstance().setServicio(new CrunchyRollService());
         ArrayList<SearchResult> results = StreamingServiceManager.getInstance().buscarEnServicio(movie, null);
+        imprimirResultados(results);
+    }
 
-        // Obtener los contenidos del primer resultado (asumiendo que hay más resultados)
-        ArrayList<ContenidoResult> contenidos = results.get(0).getContenidos();
+    public static void imprimirResultados(ArrayList<SearchResult> results) {
+        if (results != null){
+            // Obtener los contenidos del primer resultado (asumiendo que hay más resultados)
+            ArrayList<ContenidoResult> contenidos = results.getFirst().getContenidos();
 
-        // Crear una colección de contenido
-        ColeccionContenido coleccion = new ColeccionContenido();
+            System.out.println("Resultados obtenidos: " + contenidos.size());
 
-        // Convertir los resultados en objetos Contenido y agregarlos a la colección
-        for (ContenidoResult content : contenidos) {
-            coleccion.agregarContenido(content);
+            // Crear una colección de contenido
+            ColeccionContenido coleccion = new ColeccionContenido();
+
+            // Convertir los resultados en objetos Contenido y agregarlos a la colección
+            for (ContenidoResult content : contenidos) {
+                coleccion.agregarContenido(content);
+            }
+
+            // Mostrar los detalles de todos los contenidos
+            coleccion.mostrarDetalles();
+        } else {
+            System.out.println("No hay resultados");
         }
-
-        // Mostrar los detalles de todos los contenidos
-        coleccion.mostrarDetalles();
     }
 
-    }
-
+}
