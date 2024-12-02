@@ -1,11 +1,13 @@
 package search;
 
-
-import command.SearchCommand;
-import command.Command;
-import FactoryMethod.StreamingServiceFactory;
+import abstractFactory.StreamingServiceAbstractFactory;
+import abstractFactory.NetflixServiceFactory;
+import abstractFactory.DisneyPlusServiceFactory;
+import abstractFactory.CrunchyRollServiceFactory;
 import Models.Usuario;
 import Proxy.StreamingServiceProxy;
+import command.Command;
+import command.SearchCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,24 +19,25 @@ import java.util.List;
  * a una interfaz común (StreamingService).
  * Además, implementa el patrón Command para encapsular las operaciones de búsqueda,
  * consulta y configuración en objetos de comando.
+ * Utiliza el patrón Abstract Factory para crear los servicios de streaming.
  */
 public class StreamingServiceManager {
     private static StreamingServiceManager instance;
 
     private StreamingService servicioActual;
-    private HashMap<String, StreamingService> serviciosDisponibles = new HashMap<>();
+    private HashMap<String, StreamingServiceAbstractFactory> serviciosDisponibles = new HashMap<>();
     private List<Command> commandHistory = new ArrayList<>(); // Para almacenar el historial de comandos
 
     private StreamingServiceManager() {
-        // Usar el Factory Method para obtener servicios adaptados
-        StreamingService crunchyRoll = StreamingServiceFactory.getService("crunchyroll");
-        StreamingService disneyPlus = StreamingServiceFactory.getService("disneyplus");
-        StreamingService netflix = StreamingServiceFactory.getService("netflix");
+        // Crear fábricas para cada servicio de streaming
+        StreamingServiceAbstractFactory netflixFactory = new NetflixServiceFactory();
+        StreamingServiceAbstractFactory disneyPlusFactory = new DisneyPlusServiceFactory();
+        StreamingServiceAbstractFactory crunchyRollFactory = new CrunchyRollServiceFactory();
 
-        // Almacenar los servicios adaptados
-        serviciosDisponibles.put("crunchyroll", crunchyRoll);
-        serviciosDisponibles.put("disneyplus", disneyPlus);
-        serviciosDisponibles.put("netflix", netflix);
+        // Almacenar las fábricas en el mapa
+        serviciosDisponibles.put("netflix", netflixFactory);
+        serviciosDisponibles.put("disneyplus", disneyPlusFactory);
+        serviciosDisponibles.put("crunchyroll", crunchyRollFactory);
     }
 
     public static StreamingServiceManager getInstance() {
@@ -44,21 +47,39 @@ public class StreamingServiceManager {
         return instance;
     }
 
+    /**
+     * Establece el servicio de streaming actual utilizando la fábrica correspondiente.
+     *
+     * @param servicio Nombre del servicio de streaming (Netflix, DisneyPlus, Crunchyroll).
+     * @param usuario  El usuario que solicita el servicio.
+     */
     public void setServicio(String servicio, Usuario usuario) {
-        switch (servicio) {
-            case "crunchyroll":
-            case "disneyplus":
-            case "netflix":
-                servicioActual = new StreamingServiceProxy((StreamingService) serviciosDisponibles.get(servicio).clone(), usuario);
-                break;
-            default:
-                System.out.println("Servicio no disponible");
+        StreamingServiceAbstractFactory factory = serviciosDisponibles.get(servicio);
+        if (factory != null) {
+            // Usar la fábrica abstracta para crear el servicio y adaptarlo
+            servicioActual = new StreamingServiceProxy(factory.createService(), usuario);
+        } else {
+            System.out.println("Servicio no disponible");
+        }
+    }
+
+    /**
+     * Configura el servicio de streaming actual con parámetros de configuración.
+     *
+     * @param configuracionServicio Parámetros de configuración del servicio.
+     */
+    public void configurarServicio(ArrayList<String> configuracionServicio) {
+        if (servicioActual != null) {
+            servicioActual.configurar(configuracionServicio);
+        } else {
+            System.out.println("No se ha seleccionado ningún servicio");
         }
     }
 
     /**
      * Realiza una consulta utilizando el patrón Command.
-     * @param query Parámetro de búsqueda.
+     *
+     * @param query        Parámetro de búsqueda.
      * @param configParams Lista de parámetros de configuración.
      * @return Resultados de la consulta.
      */
@@ -76,7 +97,8 @@ public class StreamingServiceManager {
 
     /**
      * Realiza una búsqueda utilizando el patrón Command.
-     * @param query Parámetro de búsqueda.
+     *
+     * @param query        Parámetro de búsqueda.
      * @param configParams Lista de parámetros de configuración.
      * @return Resultados de la búsqueda.
      */
