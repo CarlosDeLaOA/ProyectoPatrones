@@ -70,3 +70,9 @@ registrarse con correo y contrasena.
 ```
   src/adapter/*
 ```
+
+### Command
+
+```
+  src/command/*
+```

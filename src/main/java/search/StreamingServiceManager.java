@@ -1,22 +1,29 @@
 package search;
 
+
+import command.SearchCommand;
+import command.Command;
 import FactoryMethod.StreamingServiceFactory;
 import Models.Usuario;
 import Proxy.StreamingServiceProxy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Esta clase maneja la selección y configuración de servicios de streaming,
  * utilizando el patrón Adapter para adaptar los diferentes servicios de streaming
  * a una interfaz común (StreamingService).
+ * Además, implementa el patrón Command para encapsular las operaciones de búsqueda,
+ * consulta y configuración en objetos de comando.
  */
 public class StreamingServiceManager {
     private static StreamingServiceManager instance;
 
     private StreamingService servicioActual;
     private HashMap<String, StreamingService> serviciosDisponibles = new HashMap<>();
+    private List<Command> commandHistory = new ArrayList<>(); // Para almacenar el historial de comandos
 
     private StreamingServiceManager() {
         // Usar el Factory Method para obtener servicios adaptados
@@ -49,16 +56,17 @@ public class StreamingServiceManager {
         }
     }
 
-    public void configurarServicio(ArrayList<String> configuracionServicio) {
-        if (servicioActual != null) {
-            servicioActual.configurar(configuracionServicio);
-        } else {
-            System.out.println("No se ha seleccionado ningún servicio");
-        }
-    }
-
+    /**
+     * Realiza una consulta utilizando el patrón Command.
+     * @param query Parámetro de búsqueda.
+     * @param configParams Lista de parámetros de configuración.
+     * @return Resultados de la consulta.
+     */
     public ArrayList<SearchResult> consultarServicio(String query, ArrayList<String> configParams) {
         if (servicioActual != null) {
+            Command command = new SearchCommand(servicioActual, query, configParams);
+            command.execute();
+            commandHistory.add(command); // Almacenar el comando ejecutado
             return servicioActual.consultar(query, configParams);
         } else {
             System.out.println("No se ha seleccionado ningún servicio");
@@ -66,8 +74,17 @@ public class StreamingServiceManager {
         }
     }
 
+    /**
+     * Realiza una búsqueda utilizando el patrón Command.
+     * @param query Parámetro de búsqueda.
+     * @param configParams Lista de parámetros de configuración.
+     * @return Resultados de la búsqueda.
+     */
     public ArrayList<SearchResult> buscarEnServicio(String query, ArrayList<String> configParams) {
         if (servicioActual != null) {
+            Command command = new SearchCommand(servicioActual, query, configParams);
+            command.execute();
+            commandHistory.add(command); // Almacenar el comando ejecutado
             return servicioActual.buscar(query.replace(" ", "+"), configParams);
         } else {
             System.out.println("No se ha seleccionado ningún servicio");
