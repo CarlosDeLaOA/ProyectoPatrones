@@ -64,6 +64,7 @@ registrarse con correo y contrasena.
 ```
   src/search/Contenido
   src/search/ContenidoResult
+  src/search/ColeccionContenido
 ```
 ### Adapter
 
@@ -81,4 +82,9 @@ registrarse con correo y contrasena.
 
 ```
   src/abstractFactory/*
+```
+
+### Decorator
+```
+  src/decorator/*
 ```

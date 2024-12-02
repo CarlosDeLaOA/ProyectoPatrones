@@ -1,5 +1,7 @@
 package search;
 
+import decorator.ControlAccesoDecorator;
+import decorator.LogDecorator;
 import abstractFactory.StreamingServiceAbstractFactory;
 import abstractFactory.NetflixServiceFactory;
 import abstractFactory.DisneyPlusServiceFactory;
@@ -20,6 +22,7 @@ import java.util.List;
  * Además, implementa el patrón Command para encapsular las operaciones de búsqueda,
  * consulta y configuración en objetos de comando.
  * Utiliza el patrón Abstract Factory para crear los servicios de streaming.
+ * Utiliza el patrón Decorator para añadir funcionalidades adicionales de manera dinámica.
  */
 public class StreamingServiceManager {
     private static StreamingServiceManager instance;
@@ -56,11 +59,28 @@ public class StreamingServiceManager {
     public void setServicio(String servicio, Usuario usuario) {
         StreamingServiceAbstractFactory factory = serviciosDisponibles.get(servicio);
         if (factory != null) {
-            // Usar la fábrica abstracta para crear el servicio y adaptarlo
-            servicioActual = new StreamingServiceProxy(factory.createService(), usuario);
+            // Crear el servicio base utilizando la fábrica abstracta
+            servicioActual = factory.createService();
+            // Aplicar los decoradores dinámicamente
+            servicioActual = aplicarDecoradores(servicioActual, usuario);
+            servicioActual = new StreamingServiceProxy(servicioActual, usuario);
         } else {
             System.out.println("Servicio no disponible");
         }
+    }
+
+    /**
+     * Aplica los decoradores dinámicamente.
+     *
+     * @param servicio El servicio de streaming seleccionado.
+     * @param usuario  El usuario que solicita el servicio.
+     * @return El servicio de streaming con los decoradores aplicados.
+     */
+    private StreamingService aplicarDecoradores(StreamingService servicio, Usuario usuario) {
+        // Aplicar log y control de acceso como decoradores
+        servicio = new ControlAccesoDecorator(servicio); // Asumiendo que el ControlAccesoDecorator toma un usuario
+        servicio = new LogDecorator(servicio);
+        return servicio;
     }
 
     /**
