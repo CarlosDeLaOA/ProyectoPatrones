@@ -42,6 +42,9 @@ public abstract class StreamingService implements Prototype {
         this.token = token;
     }
 
+    public ArrayList<SearchResult> usarStrategy(SearchStrategy searchStrategy, StreamingService servicio, String query){
+        return searchStrategy.buscar(query, servicio);
+    }
 }
 
 

@@ -11,9 +11,6 @@ import Proxy.StreamingServiceProxy;
 import command.Command;
 import command.SearchCommand;
 import strategy.SearchStrategy;
-import strategy.SearchStrategyCategoria;
-import strategy.SearchStrategyTendencia;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +105,14 @@ public class StreamingServiceManager {
     public void setSearchStrategy(SearchStrategy strategy) {
         this.searchStrategy = strategy;
     }
+    public ArrayList<SearchResult> iniciarBusquedaStrategy(String query){
+
+       if(searchStrategy != null && servicioActual != null){
+           return servicioActual.usarStrategy(searchStrategy, servicioActual,query);
+       }
+       System.out.println("No se ha podido realizar la búsqueda, verifique que se haya seleccionado un servicio");
+       return null;
+    }
 
     /**
      * Realiza una consulta utilizando el patrón Command y la estrategia seleccionada.
@@ -146,8 +151,6 @@ public class StreamingServiceManager {
      */
     public ArrayList<SearchResult> buscarEnServicio(String query, ArrayList<String> configParams) {
         if (servicioActual != null) {
-            // Verificar si la estrategia está definida
-            if (searchStrategy != null) {
                 // Ejecutar el comando de búsqueda
                 Command command = new SearchCommand(servicioActual, query, configParams);
                 command.execute();
@@ -155,10 +158,6 @@ public class StreamingServiceManager {
 
                 // Realizar la búsqueda en el servicio utilizando la estrategia
                 return servicioActual.buscar(query.replace(" ", "+"), configParams, searchStrategy);
-            } else {
-                System.out.println("No se ha definido una estrategia de búsqueda.");
-                return null;
-            }
         } else {
             System.out.println("No se ha seleccionado ningún servicio.");
             return null;

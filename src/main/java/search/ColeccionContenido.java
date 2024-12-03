@@ -15,6 +15,11 @@ public class ColeccionContenido implements Contenido {
     public void mostrarDetalles() {
         for (Contenido contenido : contenidos) {
             contenido.mostrarDetalles();  // Llamamos a mostrarDetalles de cada contenido
+            try{
+                Thread.sleep(500);
+            }catch (Exception e){
+
+            }
         }
     }
 }

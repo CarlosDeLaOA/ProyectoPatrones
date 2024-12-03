@@ -2,15 +2,11 @@ import autenticacionState.ContextoAutenticacion;
 import Models.Usuario;
 import Models.Subscripcion;
 import observer.NotificationManager;
-import org.json.simple.parser.ParseException;
 import search.*;
 import strategy.SearchStrategy;
 import strategy.SearchStrategyCategoria;
 import strategy.SearchStrategyTendencia;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -32,6 +28,7 @@ public class Main {
             System.out.println("6. Cerrar Sesión");
             System.out.println("7. Mostrar Estado");
             System.out.println("8. Enviar notificacion a usuarios subscritos");
+            System.out.println("9. Opciones de búsqueda extra");
             System.out.println("0. Salir");
             option = scanner.nextInt();
             scanner.nextLine(); // Consume el salto de línea
@@ -60,12 +57,6 @@ public class Main {
                     // Selección del servicio de streaming
                     StreamingServiceManager.getInstance().setServicio(serviceName, usuario);
                     System.out.println("Servicio de " + serviceName + " seleccionado y configurado.");
-
-                    // Después de seleccionar el servicio, preguntar por la estrategia de búsqueda
-                    seleccionarEstrategiaBusqueda(scanner);
-
-                    // Realizar la búsqueda de películas
-                    buscarPelicula(scanner);
                 }
                 case 4 -> {
                     System.out.println("Intentando acceder al servicio de streaming...");
@@ -100,6 +91,7 @@ public class Main {
                     System.out.println("Enviando notificacion\n");
                     notificationManager.notifySubcribers(texto);
                 }
+                case 9 -> seleccionarEstrategiaBusqueda(scanner);
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción no válida.");
             }
@@ -123,6 +115,8 @@ public class Main {
     }
 
     public static void seleccionarEstrategiaBusqueda(Scanner scanner) {
+        String query = "";
+
         // Seleccionar la estrategia de búsqueda
         System.out.println("Seleccione el tipo de búsqueda:");
         System.out.println("1. Buscar por Categoría");
@@ -130,6 +124,20 @@ public class Main {
         int strategyOption = scanner.nextInt();
         scanner.nextLine();
 
+        if(strategyOption == 1){
+            System.out.println("Seleccione una categoría");
+            System.out.println("1.Comedia");
+            System.out.println("2.Horror");
+            System.out.println("3.Aventura");
+            System.out.println("4.Romance");
+            System.out.println("5.Drama");
+
+            query = scanner.nextLine();
+            query = switch (query){
+                case "1", "2", "3", "4", "5" -> query;
+                default -> "1";
+            };
+        }
         // Seleccionamos la estrategia en base a la opción
         SearchStrategy strategy = switch (strategyOption) {
             case 1 -> new SearchStrategyCategoria();  // Estrategia por Categoría
@@ -142,13 +150,16 @@ public class Main {
 
         // Configurar la estrategia en el StreamingServiceManager
         StreamingServiceManager.getInstance().setSearchStrategy(strategy);
+
+        // Realizamos la búsqueda usando el servicio seleccionado y la estrategia configurada
+        ArrayList<SearchResult> results = StreamingServiceManager.getInstance().iniciarBusquedaStrategy(query);
+        imprimirResultados(results);
     }
 
-    public static void buscarPelicula(Scanner scanner) throws IOException {
+    public static void buscarPelicula(Scanner scanner){
         // Preguntar por el nombre de la película
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Ingrese el nombre de la película:");
-        String movie = in.readLine();
+        String movie = scanner.nextLine();
 
         // Realizamos la búsqueda usando el servicio seleccionado y la estrategia configurada
         ArrayList<SearchResult> results = StreamingServiceManager.getInstance().buscarEnServicio(movie, null);
