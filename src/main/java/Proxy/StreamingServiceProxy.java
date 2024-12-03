@@ -57,7 +57,8 @@ public class StreamingServiceProxy extends StreamingService {
         System.out.println("Acceso denegado a la consulta.");
         return new ArrayList<>();
     }
-    
+
+
     @Override
     public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
         if (tieneAcceso()) {

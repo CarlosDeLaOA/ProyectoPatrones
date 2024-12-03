@@ -7,11 +7,7 @@ import search.SearchResult;
 
 import java.util.ArrayList;
 
-/**
- * Adaptador para Netflix, para que implemente la interfaz común StreamingService.
- * Esta clase adapta la interfaz específica de Netflix a la interfaz común que utilizan
- * los demás servicios de streaming.
- */
+
 public class NetflixAdapter extends StreamingService {
     private NetflixService netflixService;
 
