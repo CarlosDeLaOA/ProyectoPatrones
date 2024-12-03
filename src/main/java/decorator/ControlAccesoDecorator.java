@@ -5,9 +5,6 @@ import search.SearchResult;
 import search.StreamingService;
 import java.util.ArrayList;
 
-/**
- * Decorador que implementa control de acceso para el servicio de streaming.
- */
 public class ControlAccesoDecorator extends StreamingService {
     private StreamingService servicioBase;
 

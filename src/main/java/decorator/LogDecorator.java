@@ -5,9 +5,7 @@ import search.SearchResult;
 import search.StreamingService;
 import java.util.ArrayList;
 
-/**
- * Decorador que agrega registro de logs al servicio de streaming.
- */
+
 public class LogDecorator extends StreamingService {
     private StreamingService servicioBase;
 

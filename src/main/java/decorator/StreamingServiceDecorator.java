@@ -5,10 +5,7 @@ import search.StreamingService;
 
 import java.util.ArrayList;
 
-/**
- * Clase decoradora para StreamingService.
- * Esta clase permite agregar funcionalidades adicionales al servicio de streaming.
- */
+
 public abstract class StreamingServiceDecorator extends StreamingService {
     protected StreamingService servicio;
 
