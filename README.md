@@ -88,3 +88,7 @@ registrarse con correo y contrasena.
 ```
   src/decorator/*
 ```
+### Strategy
+```
+  src/strategy/*
+```
