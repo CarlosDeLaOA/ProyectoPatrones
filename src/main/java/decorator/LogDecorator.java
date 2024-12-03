@@ -3,6 +3,8 @@ package decorator;
 import search.Prototype;
 import search.SearchResult;
 import search.StreamingService;
+import strategy.SearchStrategy;
+
 import java.util.ArrayList;
 
 
@@ -20,15 +22,15 @@ public class LogDecorator extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Registrando acción: Consulta de servicio.");
-        return servicioBase.consultar(query, configParams);
+        return servicioBase.consultar(query, configParams, searchStrategy);
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Registrando acción: Búsqueda en servicio.");
-        return servicioBase.buscar(query, configParams);
+        return servicioBase.buscar(query, configParams, searchStrategy);
     }
 
     @Override

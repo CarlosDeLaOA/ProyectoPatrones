@@ -1,6 +1,7 @@
 package search;
 
 import ApiFachada.ClienteApiRest;
+import strategy.SearchStrategy;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class CrunchyRollService extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Consultando resultados de CrunchyRoll: ");
 
         String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=anime", getToken());
@@ -43,7 +44,7 @@ public class CrunchyRollService extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Buscando '" + query + "' en CrunchyRoll:");
 
         String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=" + query, getToken());

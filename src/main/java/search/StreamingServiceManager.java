@@ -10,6 +10,9 @@ import Models.Usuario;
 import Proxy.StreamingServiceProxy;
 import command.Command;
 import command.SearchCommand;
+import strategy.SearchStrategy;
+import strategy.SearchStrategyCategoria;
+import strategy.SearchStrategyTendencia;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ import java.util.List;
  * consulta y configuración en objetos de comando.
  * Utiliza el patrón Abstract Factory para crear los servicios de streaming.
  * Utiliza el patrón Decorator para añadir funcionalidades adicionales de manera dinámica.
+ * Utiliza el patrón Strategy para cambiar dinámicamente las estrategias de búsqueda.
  */
 public class StreamingServiceManager {
     private static StreamingServiceManager instance;
@@ -30,6 +34,7 @@ public class StreamingServiceManager {
     private StreamingService servicioActual;
     private HashMap<String, StreamingServiceAbstractFactory> serviciosDisponibles = new HashMap<>();
     private List<Command> commandHistory = new ArrayList<>(); // Para almacenar el historial de comandos
+    private SearchStrategy searchStrategy; // Para la estrategia de búsqueda
 
     private StreamingServiceManager() {
         // Crear fábricas para cada servicio de streaming
@@ -62,7 +67,7 @@ public class StreamingServiceManager {
             // Crear el servicio base utilizando la fábrica abstracta
             servicioActual = factory.createService();
             // Aplicar los decoradores dinámicamente
-            servicioActual = aplicarDecoradores(servicioActual, usuario);
+            servicioActual = aplicarDecoradores(servicioActual);
             servicioActual = new StreamingServiceProxy(servicioActual, usuario);
         } else {
             System.out.println("Servicio no disponible");
@@ -73,13 +78,12 @@ public class StreamingServiceManager {
      * Aplica los decoradores dinámicamente.
      *
      * @param servicio El servicio de streaming seleccionado.
-     * @param usuario  El usuario que solicita el servicio.
      * @return El servicio de streaming con los decoradores aplicados.
      */
-    private StreamingService aplicarDecoradores(StreamingService servicio, Usuario usuario) {
+    private StreamingService aplicarDecoradores(StreamingService servicio) {
         // Aplicar log y control de acceso como decoradores
-        servicio = new ControlAccesoDecorator(servicio); // Asumiendo que el ControlAccesoDecorator toma un usuario
-        servicio = new LogDecorator(servicio);
+        servicio = new ControlAccesoDecorator(servicio); // Decorador de control de acceso
+        servicio = new LogDecorator(servicio); // Decorador de log
         return servicio;
     }
 
@@ -97,7 +101,16 @@ public class StreamingServiceManager {
     }
 
     /**
-     * Realiza una consulta utilizando el patrón Command.
+     * Establece la estrategia de búsqueda.
+     *
+     * @param strategy Estrategia de búsqueda (por ejemplo, por categoría o por tendencia).
+     */
+    public void setSearchStrategy(SearchStrategy strategy) {
+        this.searchStrategy = strategy;
+    }
+
+    /**
+     * Realiza una consulta utilizando el patrón Command y la estrategia seleccionada.
      *
      * @param query        Parámetro de búsqueda.
      * @param configParams Lista de parámetros de configuración.
@@ -105,18 +118,27 @@ public class StreamingServiceManager {
      */
     public ArrayList<SearchResult> consultarServicio(String query, ArrayList<String> configParams) {
         if (servicioActual != null) {
-            Command command = new SearchCommand(servicioActual, query, configParams);
-            command.execute();
-            commandHistory.add(command); // Almacenar el comando ejecutado
-            return servicioActual.consultar(query, configParams);
+            // Verificar si la estrategia está definida
+            if (searchStrategy != null) {
+                // Ejecutar el comando de búsqueda
+                Command command = new SearchCommand(servicioActual, query, configParams);
+                command.execute();
+                commandHistory.add(command); // Almacenar el comando ejecutado
+
+                // Realizar la consulta en el servicio utilizando la estrategia
+                return servicioActual.consultar(query, configParams, searchStrategy);
+            } else {
+                System.out.println("No se ha definido una estrategia de búsqueda.");
+                return null;
+            }
         } else {
-            System.out.println("No se ha seleccionado ningún servicio");
+            System.out.println("No se ha seleccionado ningún servicio.");
             return null;
         }
     }
 
     /**
-     * Realiza una búsqueda utilizando el patrón Command.
+     * Realiza una búsqueda utilizando el patrón Command y la estrategia seleccionada.
      *
      * @param query        Parámetro de búsqueda.
      * @param configParams Lista de parámetros de configuración.
@@ -124,12 +146,21 @@ public class StreamingServiceManager {
      */
     public ArrayList<SearchResult> buscarEnServicio(String query, ArrayList<String> configParams) {
         if (servicioActual != null) {
-            Command command = new SearchCommand(servicioActual, query, configParams);
-            command.execute();
-            commandHistory.add(command); // Almacenar el comando ejecutado
-            return servicioActual.buscar(query.replace(" ", "+"), configParams);
+            // Verificar si la estrategia está definida
+            if (searchStrategy != null) {
+                // Ejecutar el comando de búsqueda
+                Command command = new SearchCommand(servicioActual, query, configParams);
+                command.execute();
+                commandHistory.add(command); // Almacenar el comando ejecutado
+
+                // Realizar la búsqueda en el servicio utilizando la estrategia
+                return servicioActual.buscar(query.replace(" ", "+"), configParams, searchStrategy);
+            } else {
+                System.out.println("No se ha definido una estrategia de búsqueda.");
+                return null;
+            }
         } else {
-            System.out.println("No se ha seleccionado ningún servicio");
+            System.out.println("No se ha seleccionado ningún servicio.");
             return null;
         }
     }

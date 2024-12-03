@@ -1,6 +1,7 @@
 package search;
 
 import ApiFachada.ClienteApiRest;
+import strategy.SearchStrategy;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class DisneyPlusService extends StreamingService {
         System.out.println("Configurando servicio de DisneyPlus...");
 }
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Consultando resultados de DisneyPlus:");
 
         String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=disney", getToken());
@@ -40,7 +41,7 @@ public class DisneyPlusService extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Buscando '" + query + "' en DisneyPlus");
         String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=" + query, getToken());
         SearchResult searchResult = null;

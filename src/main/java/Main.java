@@ -4,6 +4,9 @@ import Models.Subscripcion;
 import observer.NotificationManager;
 import org.json.simple.parser.ParseException;
 import search.*;
+import strategy.SearchStrategy;
+import strategy.SearchStrategyCategoria;
+import strategy.SearchStrategyTendencia;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,15 +57,22 @@ public class Main {
                         }
                     };
 
+                    // Selección del servicio de streaming
                     StreamingServiceManager.getInstance().setServicio(serviceName, usuario);
                     System.out.println("Servicio de " + serviceName + " seleccionado y configurado.");
+
+                    // Después de seleccionar el servicio, preguntar por la estrategia de búsqueda
+                    seleccionarEstrategiaBusqueda(scanner);
+
+                    // Realizar la búsqueda de películas
+                    buscarPelicula(scanner);
                 }
                 case 4 -> {
-                        System.out.println("Intentando acceder al servicio de streaming...");
-                        ArrayList<SearchResult> resultados = StreamingServiceManager.getInstance().consultarServicio("Consultar",null);
-                        imprimirResultados(resultados);
+                    System.out.println("Intentando acceder al servicio de streaming...");
+                    ArrayList<SearchResult> resultados = StreamingServiceManager.getInstance().consultarServicio("Consultar", null);
+                    imprimirResultados(resultados);
                 }
-                case 5 -> buscarPelicula();
+                case 5 -> buscarPelicula(scanner);
 
                 case 6 -> contexto.cerrarSesion();
                 case 7 -> contexto.mostrarEstado();
@@ -89,7 +99,6 @@ public class Main {
                     String texto = scanner.nextLine();
                     System.out.println("Enviando notificacion\n");
                     notificationManager.notifySubcribers(texto);
-
                 }
                 case 0 -> System.out.println("Saliendo...");
                 default -> System.out.println("Opción no válida.");
@@ -113,21 +122,43 @@ public class Main {
         return usuario;
     }
 
-    public static void buscarPelicula() throws IOException {
+    public static void seleccionarEstrategiaBusqueda(Scanner scanner) {
+        // Seleccionar la estrategia de búsqueda
+        System.out.println("Seleccione el tipo de búsqueda:");
+        System.out.println("1. Buscar por Categoría");
+        System.out.println("2. Buscar por Tendencia");
+        int strategyOption = scanner.nextInt();
+        scanner.nextLine();
 
+        // Seleccionamos la estrategia en base a la opción
+        SearchStrategy strategy = switch (strategyOption) {
+            case 1 -> new SearchStrategyCategoria();  // Estrategia por Categoría
+            case 2 -> new SearchStrategyTendencia();  // Estrategia por Tendencia
+            default -> {
+                System.out.println("Opción no válida. Se selecciona por defecto la búsqueda por Categoría.");
+                yield new SearchStrategyCategoria();  // Por defecto se selecciona por Categoría
+            }
+        };
+
+        // Configurar la estrategia en el StreamingServiceManager
+        StreamingServiceManager.getInstance().setSearchStrategy(strategy);
+    }
+
+    public static void buscarPelicula(Scanner scanner) throws IOException {
+        // Preguntar por el nombre de la película
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Ingrese el nombre de la película:");
         String movie = in.readLine();
 
-        // Realizar la búsqueda en el servicio de streaming
+        // Realizamos la búsqueda usando el servicio seleccionado y la estrategia configurada
         ArrayList<SearchResult> results = StreamingServiceManager.getInstance().buscarEnServicio(movie, null);
         imprimirResultados(results);
     }
 
     public static void imprimirResultados(ArrayList<SearchResult> results) {
-        if (results != null){
+        if (results != null && !results.isEmpty()) {
             // Obtener los contenidos del primer resultado (asumiendo que hay más resultados)
-            ArrayList<ContenidoResult> contenidos = results.getFirst().getContenidos();
+            ArrayList<ContenidoResult> contenidos = results.get(0).getContenidos();
 
             System.out.println("Resultados obtenidos: " + contenidos.size());
 
@@ -145,5 +176,4 @@ public class Main {
             System.out.println("No hay resultados");
         }
     }
-
 }

@@ -1,6 +1,8 @@
 package command;
 
 import search.StreamingService;
+import strategy.SearchStrategy;
+
 import java.util.ArrayList;
 
 /**
@@ -10,6 +12,7 @@ public class SearchCommand implements Command {
     private StreamingService servicio;
     private String query;
     private ArrayList<String> configParams;
+    private SearchStrategy searchStrategy;
 
     /**
      * Constructor del comando de búsqueda.
@@ -27,6 +30,6 @@ public class SearchCommand implements Command {
     @Override
     public void execute() {
         // Ejecutar búsqueda en el servicio
-        servicio.buscar(query, configParams);
+        servicio.buscar(query, configParams, searchStrategy);
     }
 }

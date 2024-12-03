@@ -1,6 +1,7 @@
 package search;
 
 import ApiFachada.ClienteApiRest;
+import strategy.SearchStrategy;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class NetflixService extends StreamingService{
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Consultando resultados de Netflix:");
         String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=netflix", getToken());
         SearchResult searchResult = null;
@@ -39,7 +40,7 @@ public class NetflixService extends StreamingService{
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Buscando '" + query + "' en Netflix");
         String result = ClienteApiRest.getInstance().getApiRestFachada().obtenerRecurso(getBaseUrl() + "search/movie?query=" + query, getToken());
         SearchResult searchResult = null;

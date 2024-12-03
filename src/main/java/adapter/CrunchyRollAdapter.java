@@ -4,6 +4,7 @@ import search.CrunchyRollService;
 import search.Prototype;
 import search.StreamingService;
 import search.SearchResult;
+import strategy.SearchStrategy;
 
 import java.util.ArrayList;
 
@@ -20,13 +21,13 @@ public class CrunchyRollAdapter extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
-        return crunchyRollService.consultar(query, configParams);
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return crunchyRollService.consultar(query, configParams, searchStrategy);
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
-        return crunchyRollService.buscar(query, configParams);
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return crunchyRollService.buscar(query, configParams, searchStrategy);
     }
 
     @Override

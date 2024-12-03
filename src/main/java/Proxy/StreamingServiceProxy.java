@@ -5,6 +5,8 @@ import Models.Subscripcion;
 import search.Prototype;
 import search.StreamingService;
 import search.SearchResult;
+import strategy.SearchStrategy;
+
 import java.util.ArrayList;
 
 
@@ -50,9 +52,9 @@ public class StreamingServiceProxy extends StreamingService {
 
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         if (tieneAcceso()) {
-            return realService.consultar(query, configParams);
+            return realService.consultar(query, configParams, searchStrategy);
         }
         System.out.println("Acceso denegado a la consulta.");
         return new ArrayList<>();
@@ -60,9 +62,9 @@ public class StreamingServiceProxy extends StreamingService {
 
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         if (tieneAcceso()) {
-            return realService.buscar(query, configParams);
+            return realService.buscar(query, configParams, searchStrategy);
         }
         System.out.println("Acceso denegado a la búsqueda.");
         return new ArrayList<>();

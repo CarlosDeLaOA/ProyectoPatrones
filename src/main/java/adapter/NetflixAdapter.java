@@ -4,6 +4,7 @@ import search.NetflixService;
 import search.Prototype;
 import search.StreamingService;
 import search.SearchResult;
+import strategy.SearchStrategy;
 
 import java.util.ArrayList;
 
@@ -21,13 +22,13 @@ public class NetflixAdapter extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
-        return netflixService.consultar(query, configParams);
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return netflixService.consultar(query, configParams, searchStrategy);
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
-        return netflixService.buscar(query, configParams);
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return netflixService.buscar(query, configParams, searchStrategy);
     }
 
     @Override

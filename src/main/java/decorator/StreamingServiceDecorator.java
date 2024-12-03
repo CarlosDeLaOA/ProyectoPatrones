@@ -2,6 +2,7 @@ package decorator;
 
 import search.SearchResult;
 import search.StreamingService;
+import strategy.SearchStrategy;
 
 import java.util.ArrayList;
 
@@ -19,12 +20,12 @@ public abstract class StreamingServiceDecorator extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
-        return servicio.consultar(query, configParams);
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return servicio.consultar(query, configParams, searchStrategy);
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
-        return servicio.buscar(query, configParams);
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return servicio.buscar(query, configParams, searchStrategy);
     }
 }

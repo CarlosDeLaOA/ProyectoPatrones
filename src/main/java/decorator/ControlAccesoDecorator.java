@@ -3,6 +3,8 @@ package decorator;
 import search.Prototype;
 import search.SearchResult;
 import search.StreamingService;
+import strategy.SearchStrategy;
+
 import java.util.ArrayList;
 
 public class ControlAccesoDecorator extends StreamingService {
@@ -22,17 +24,17 @@ public class ControlAccesoDecorator extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         // Añadir control de acceso antes de la consulta
         System.out.println("Verificando acceso para consulta...");
-        return servicioBase.consultar(query, configParams);
+        return servicioBase.consultar(query, configParams, searchStrategy);
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         // Añadir control de acceso antes de la búsqueda
         System.out.println("Verificando acceso para búsqueda...");
-        return servicioBase.buscar(query, configParams);
+        return servicioBase.buscar(query, configParams, searchStrategy);
     }
 
     @Override

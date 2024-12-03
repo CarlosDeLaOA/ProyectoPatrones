@@ -1,5 +1,7 @@
 package search;
 
+import strategy.SearchStrategy;
+
 import java.util.ArrayList;
 
 public abstract class StreamingService implements Prototype {
@@ -19,9 +21,9 @@ public abstract class StreamingService implements Prototype {
 
     abstract public void configurar(ArrayList<String> configParams);
 
-    abstract public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams);
+    abstract public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy);
 
-    abstract public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams);
+    abstract public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy);
 
     abstract public Prototype clone();
     public String getBaseUrl() {
