@@ -6,6 +6,7 @@ import search.Prototype;
 import search.StreamingService;
 import search.SearchResult;
 import java.util.ArrayList;
+import strategy.SearchStrategy;
 
 /**
  * Proxy para la interfaz de servicios de streaming, que gestiona el acceso
@@ -84,9 +85,9 @@ public class StreamingServiceProxy extends StreamingService {
      *         se devuelve una lista vacía.
      */
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         if (tieneAcceso()) {
-            return realService.consultar(query, configParams);
+            return realService.consultar(query, configParams, searchStrategy);
         }
         System.out.println("Acceso denegado a la consulta.");
         return new ArrayList<>();
@@ -102,9 +103,9 @@ public class StreamingServiceProxy extends StreamingService {
      *         se devuelve una lista vacía.
      */
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         if (tieneAcceso()) {
-            return realService.buscar(query, configParams);
+            return realService.buscar(query, configParams, searchStrategy);
         }
         System.out.println("Acceso denegado a la búsqueda.");
         return new ArrayList<>();
