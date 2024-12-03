@@ -3,10 +3,11 @@ package decorator;
 import search.Prototype;
 import search.SearchResult;
 import search.StreamingService;
-import strategy.SearchStrategy;
-
 import java.util.ArrayList;
 
+/**
+ * Decorador que implementa control de acceso para el servicio de streaming.
+ */
 public class ControlAccesoDecorator extends StreamingService {
     private StreamingService servicioBase;
 
@@ -24,17 +25,17 @@ public class ControlAccesoDecorator extends StreamingService {
     }
 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
         // Añadir control de acceso antes de la consulta
         System.out.println("Verificando acceso para consulta...");
-        return servicioBase.consultar(query, configParams, searchStrategy);
+        return servicioBase.consultar(query, configParams);
     }
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
         // Añadir control de acceso antes de la búsqueda
         System.out.println("Verificando acceso para búsqueda...");
-        return servicioBase.buscar(query, configParams, searchStrategy);
+        return servicioBase.buscar(query, configParams);
     }
 
     @Override
