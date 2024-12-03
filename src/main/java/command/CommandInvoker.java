@@ -1,4 +1,4 @@
-package invoker;
+package command;
 
 import command.Command;
 
