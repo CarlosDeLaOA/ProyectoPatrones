@@ -3,11 +3,16 @@ package adapter;
 import search.CrunchyRollService;
 import search.Prototype;
 import search.StreamingService;
-import search.SearchResult;
 import strategy.SearchStrategy;
+import search.SearchResult;
 
 import java.util.ArrayList;
 
+/**
+ * Adaptador para Crunchyroll, para que implemente la interfaz común StreamingService.
+ * Esta clase adapta la interfaz específica de Crunchyroll a la interfaz común que utilizan
+ * los demás servicios de streaming.
+ */
 public class CrunchyRollAdapter extends StreamingService {
     private CrunchyRollService crunchyRollService;
 
@@ -35,3 +40,4 @@ public class CrunchyRollAdapter extends StreamingService {
         return new CrunchyRollAdapter((CrunchyRollService) crunchyRollService.clone());
     }
 }
+

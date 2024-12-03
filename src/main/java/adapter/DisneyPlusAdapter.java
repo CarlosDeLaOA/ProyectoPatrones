@@ -3,11 +3,16 @@ package adapter;
 import search.DisneyPlusService;
 import search.Prototype;
 import search.StreamingService;
-import search.SearchResult;
 import strategy.SearchStrategy;
+import search.SearchResult;
 
 import java.util.ArrayList;
 
+/**
+ * Adaptador para Disney+, para que implemente la interfaz común StreamingService.
+ * Esta clase adapta la interfaz específica de Disney+ a la interfaz común que utilizan
+ * los demás servicios de streaming.
+ */
 public class DisneyPlusAdapter extends StreamingService {
     private DisneyPlusService disneyPlusService;
 
@@ -35,3 +40,4 @@ public class DisneyPlusAdapter extends StreamingService {
         return new DisneyPlusAdapter((DisneyPlusService) disneyPlusService.clone());
     }
 }
+
