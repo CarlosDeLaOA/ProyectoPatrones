@@ -31,15 +31,15 @@ public abstract class StreamingServiceDecorator extends StreamingService {
 * Realiza una consulta utilizando el servicio de streaming base.
 */ 
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
-        return servicio.consultar(query, configParams);
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return servicio.consultar(query, configParams, searchStrategy);
     }
 
 /**
 * Realiza una busqueda utilizando el servicio de streaming base.
 */ 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
-        return servicio.buscar(query, configParams);
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
+        return servicio.buscar(query, configParams, searchStrategy);
     }
 }
