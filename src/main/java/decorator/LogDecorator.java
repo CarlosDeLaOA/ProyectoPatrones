@@ -4,6 +4,7 @@ import search.Prototype;
 import search.SearchResult;
 import search.StreamingService;
 import java.util.ArrayList;
+import strategy.SearchStrategy;
 
 /**
  * Decorador que agrega registro de logs al servicio de streaming.
@@ -35,9 +36,9 @@ public class LogDecorator extends StreamingService {
  * Realiza una consulta en el servicio base y registra la acción.
  */
     @Override
-    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> consultar(String query, ArrayList<String> configParams, SearchStrategy searchStrategy) {
         System.out.println("Registrando acción: Consulta de servicio.");
-        return servicioBase.consultar(query, configParams);
+        return servicioBase.consultar(query, configParams, searchStrategy);
     }
 
 /**
@@ -45,9 +46,9 @@ public class LogDecorator extends StreamingService {
  */
 
     @Override
-    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams) {
+    public ArrayList<SearchResult> buscar(String query, ArrayList<String> configParams,SearchStrategy searchStrategy ) {
         System.out.println("Registrando acción: Búsqueda en servicio.");
-        return servicioBase.buscar(query, configParams);
+        return servicioBase.buscar(query, configParams, searchStrategy);
     }
 
 /**
