@@ -123,8 +123,7 @@ public class StreamingServiceManager {
      */
     public ArrayList<SearchResult> consultarServicio(String query, ArrayList<String> configParams) {
         if (servicioActual != null) {
-            // Verificar si la estrategia está definida
-            if (searchStrategy != null) {
+
                 // Ejecutar el comando de búsqueda
                 Command command = new SearchCommand(servicioActual, query, configParams);
                 command.execute();
@@ -132,10 +131,7 @@ public class StreamingServiceManager {
 
                 // Realizar la consulta en el servicio utilizando la estrategia
                 return servicioActual.consultar(query, configParams, searchStrategy);
-            } else {
-                System.out.println("No se ha definido una estrategia de búsqueda.");
-                return null;
-            }
+
         } else {
             System.out.println("No se ha seleccionado ningún servicio.");
             return null;
